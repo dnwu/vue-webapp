@@ -4,6 +4,10 @@ import Vue from 'vue'
 import App from './App'
 import router from './router/index.js'
 import axios from 'axios'
+
+// 引入全局的样式
+import './common/css/index.scss'
+
 // 把axios添加到vue的原型中去
 Vue.prototype.$http = axios
 

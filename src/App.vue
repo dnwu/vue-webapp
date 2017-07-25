@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-header :seller='seller'></v-header>
-    <div class="tab">
+    <div class="tab border-1px">
       <router-link to="/goods" class="tab-item">商品</router-link>
       <router-link to="/ratings" class="tab-item">评价</router-link>
       <router-link to="/seller" class="tab-item">商家</router-link>
@@ -36,10 +36,13 @@ export default {
 </script>
 
 <style lang='scss'>
+@import 'common/css/mixin.scss';
 .tab {
   display: flex;
   width: 100%;
   height: 40px;
+  // border-bottom: 1px solid rgba(7, 17, 27, .1);
+  @include border-1px(rgba(7, 17, 27, .1));
   .tab-item {
     text-align: center;
     line-height: 40px;

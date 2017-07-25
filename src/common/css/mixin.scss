@@ -1,0 +1,19 @@
+@mixin border-1px($color) {
+    position: relative;
+    &::after {
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        content: '';
+        border-top: 1px solid $color;
+    }
+}
+
+// 适配图片
+@mixin bgImg($name) {
+    background-image: url($name+'@2x.png');
+    @media only screen and (-webkit-max-device-pixel-ratio: 3), (max-device-pixel-ratio:3) {
+        background-image: url($name+'@3x.png');
+    }
+}
