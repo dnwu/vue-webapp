@@ -27,3 +27,13 @@ For detailed explanation on how things work, checkout the [guide](http://vuejs-t
 1 mock数据
 2 配置路由
 ```
+## 第二天
+
+``` bash
+1 header组件完毕
+    1 评分组件
+    2 一像素边框
+    3 vue动画
+    4 felx布局
+    5 sticky-footer布局
+```
