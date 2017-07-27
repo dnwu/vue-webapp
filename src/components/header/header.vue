@@ -256,7 +256,7 @@ export default {
         }
         &.v-enter,
         &.v-leave-to {
-            transform: translate(100%,-100%);
+            transform: translateY(-100%);
             opacity: 0;
         }
         .detial-main {

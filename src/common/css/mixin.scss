@@ -10,6 +10,12 @@
     }
 }
 
+@mixin border-none() {
+    &::after {
+        display: none;
+    }
+}
+
 // 适配图片
 @mixin bgImg($name) {
     background-image: url($name+'@2x.png');

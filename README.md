@@ -37,3 +37,12 @@ For detailed explanation on how things work, checkout the [guide](http://vuejs-t
     4 felx布局
     5 sticky-footer布局
 ```
+
+## 第三天
+
+``` bash
+1 goods组件完成部分
+    1 better-scroll插件的运用
+    2 左右菜单联动
+    3 goods底部部分布局完成
+```
