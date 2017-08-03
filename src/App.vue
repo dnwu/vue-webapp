@@ -7,7 +7,9 @@
       <router-link to="/seller" class="tab-item">商家</router-link>
     </div>
     <div class="content">
-      <router-view></router-view>
+      <keep-alive>
+        <router-view :seller='seller'></router-view>
+      </keep-alive>
     </div>
   </div>
 </template>
@@ -40,8 +42,7 @@ export default {
 .tab {
   display: flex;
   width: 100%;
-  height: 40px;
-  // border-bottom: 1px solid rgba(7, 17, 27, .1);
+  height: 40px; // border-bottom: 1px solid rgba(7, 17, 27, .1);
   @include border-1px(rgba(7, 17, 27, .1));
   .tab-item {
     text-align: center;

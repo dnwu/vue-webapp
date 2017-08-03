@@ -30,35 +30,48 @@
                                     <span class="old" v-show="item.oldPrice">¥{{item.oldPrice}}</span>
                                 </div>
                             </div>
+                            <div class="carControl">
+                                <v-carCountControl :shopCarPositionData='shopCarPositionData' :item='item' @addInfo='updateInfo'></v-carCountControl>
+                            </div>
                         </li>
                     </ul>
                 </li>
             </ul>
         </div>
-        <div class="shopcar">
-            <div class="iconCar">
-                <span class="icon-shopping_cart"></span>
-            </div>
-            <div class="moneyAndSendPay">
-                <span class="money">¥0</span>
-                <span class="sendPay">另需配送费¥4元</span>
-            </div>
-            <div class="totalPay">¥20起送</div>
-        </div>
+        <v-shopcar @getCarPositionData='getCarPositionData' :totalgoods='totalgoods' :seller='seller'></v-shopcar>
     </div>
 </template>
 <script>
 const errno = 0
 import BScroll from 'better-scroll'
+import vShopcar from '../shopcar/shopcar.vue'
+import vCarCountControl from '../carCountControl/carCountControl.vue'
 export default {
     name: 'goods',
+    props: {
+        seller: {
+            type: Object
+        }
+    },
     data() {
         return {
+            // 接受请求的数据
             goods: {},
+            // 储存预设值图标的类名
             iconClassList: ['decrease', 'discount', 'invoice', 'guarantee', 'special'],
-            // goodsCategoryHeight: [],
-            setActiveClass: 0
+            // 设置侧边栏的active
+            setActiveClass: 0,
+            // 储存全全部需要购买的商品
+            totalgoods: [],
+            // 储存选择的商品信息
+            checkgoods: [],
+            // shopCar的位置信息
+            shopCarPositionData: {}
         }
+    },
+    components: {
+        'v-shopcar': vShopcar,
+        'v-carCountControl': vCarCountControl
     },
     created() {
         this.$http.get('/api/goods').then((data) => {
@@ -69,6 +82,7 @@ export default {
                         click: true
                     })
                     this.scroll2 = new BScroll(this.$refs.goodslist, {
+                        click: true,
                         probeType: 3
                     })
                     this.scroll1.on('scroll', (pos) => {
@@ -91,6 +105,29 @@ export default {
                 this.setActiveClass = index
             }
             this.scroll2.scrollToElement(this.$refs.goodslist.querySelectorAll('.category')[this.setActiveClass], 300)
+        },
+        // 通过子组件传过来的信息更新父组件中的数据
+        updateInfo(sondata) {
+            let data = JSON.parse(sondata)
+            if (this.checkgoods.length) {
+                let num = 0
+                for (let i = 0; i < this.checkgoods.length; i++) {
+                    if (this.checkgoods[i].name === data.name) {
+                        num++
+                        this.checkgoods[i].count = data.count
+                    }
+                }
+                if (num === 0) {
+                    this.checkgoods.push(data)
+                }
+            } else {
+                this.checkgoods.push(data)
+            }
+            this.totalgoods = this.checkgoods
+            // console.log(this.totalgoods)
+        },
+        getCarPositionData(pos) {
+            this.shopCarPositionData = pos
         }
     },
     computed: {
@@ -195,6 +232,7 @@ export default {
                 padding: 18px;
                 display: flex;
                 @include border-1px(rgba(7, 17, 27, 0.1));
+                position: relative;
                 &:last-child {
                     @include border-none();
                 }
@@ -248,71 +286,12 @@ export default {
                         }
                     }
                 }
+                .carControl {
+                    position: absolute;
+                    bottom: 0px;
+                    right: 18px;
+                }
             }
-        }
-    }
-    .shopcar {
-        display: flex;
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        width: 100%;
-        height: 48px;
-        background-color: #141d27;
-        padding-left: 12px;
-        .iconCar {
-            position: relative;
-            left: 0;
-            bottom: 10px;
-            z-index: 66;
-            display: inline-block;
-            width: 56px;
-            height: 56px;
-            border-radius: 50%;
-            background-color: #141d27;
-            text-align: center;
-            .icon-shopping_cart {
-                display: inline-block;
-                width: 44px;
-                height: 44px;
-                border-radius: 50%;
-                background-color: rgba(255, 255, 255, 0.2);
-                z-index: 99;
-                font-size: 24px;
-                color: rgba(255, 255, 255, 0.4);
-                line-height: 44px;
-                margin-top: 6px;
-            }
-        }
-        .moneyAndSendPay {
-            flex: 1;
-            display: inline-block;
-            color: rgba(255, 255, 255, 0.4);
-            font-size: 16px;
-            line-height: 24px;
-            margin-left: 12px;
-            margin-top: 12px;
-            .money {
-                font-weight: 700;
-                padding-right: 12px;
-                border-right: 1px solid rgba(255, 255, 255, 0.4);
-
-            }
-            .sendPay {
-                font-size: 14px;
-                font-weight: 200;
-                padding-left: 12px;
-            }
-        }
-        .totalPay {
-            width: 100px;
-            font-size: 12px;
-            color: rgba(255, 255, 255, 0.4);
-            font-weight: 700;
-            line-height: 24px;
-            padding-top: 12px;
-            background-color: rgba(255, 255, 255, 0.2);
-            text-align: center;
         }
     }
 }
